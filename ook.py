@@ -105,11 +105,17 @@ class Interpreter(object):
                 self.interpret_directly(item)
 
     def interpret_inside_loop(self, item):
+        """
+        When inside a loop, we don't want to interpret anything yet,
+        but rather 'record' the complete loop. When the number of 
+        open loops has become zero (i.e. the initial opening loop
+        has been closed), the recorded loop is interpreted as long
+        as the current cell is nonzero.
+        """
+
         if item == self.parser.END:
             self.open_loops -= 1
-            if self.open_loops < 0:
-                raise ValueError("End without begin")
-            elif self.open_loops == 0:
+            if self.open_loops == 0:
                 while self.cells[self.index]:
                     self.interpret_items(self.loop)
                 return
@@ -163,14 +169,30 @@ class Interpreter(object):
                       self.input_buffer,
                       " ".join([str(i) for i in self.output_buffer]), 
                       self.as_ascii())
-        
+
+def print_usage():
+    print "\nUsage:\n"
+    print "Interpret Ook! file: python ook.py -o <FILENAME>"        
+    print "Interpret brainfuck file: python ook.py -b <FILENAME>"
+    print "Interactive mode: python ook.py -i\n"
+
+
 if __name__ == '__main__':
-    ook = Interpreter()
     if len(sys.argv) < 2:
+        print_usage()
+    elif len(sys.argv) == 2 and sys.argv[1] == "-i":
+        ook = Interpreter()
         ook.interactive_mode()
+    elif len(sys.argv) == 3:
+        if sys.argv[1] == "-b":
+            ook = Interpreter(ook_mode=False)
+            ook.interpret_file(sys.argv[2])
+            print ook
+        elif sys.argv[1] == "-o":
+            ook = Interpreter(ook_mode=True)
+            ook.interpret_file(sys.argv[2])
+            print ook
+        else:
+            print_usage()
     else:
-        # Expect a file name as second argument,
-        # dismiss all other parameters
-        fname = sys.argv[1]
-        ook.interpret_file(fname)
-        print ook
+        print_usage()
