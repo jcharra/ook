@@ -50,35 +50,25 @@ class BFInterpreter(object):
         cmd = self.commands[self.command_index]
         if cmd == '[':
             if not self.tape.get():
-                self.ff_to_matching_closed_paren()
+                self.goto_matching_paren(1)
                 return
         elif cmd == ']':
             if self.tape.get():
-                self.rwd_to_matching_opening_paren()
+                self.goto_matching_paren(-1)
                 return
         else:
             self.interpret(cmd)
         
         self.command_index += 1
 
-    def ff_to_matching_closed_paren(self):
+    def goto_matching_paren(self, direction):
         open = 1
         while open:
-            self.command_index += 1
+            self.command_index += direction
             if self.commands[self.command_index] == ']':
-                open -= 1
+                open -= direction
             elif self.commands[self.command_index] == '[':
-                open += 1
-        self.command_index += 1
-
-    def rwd_to_matching_opening_paren(self):
-        open = 1
-        while open:
-            self.command_index -= 1
-            if self.commands[self.command_index] == '[':
-                open -= 1
-            elif self.commands[self.command_index] == ']':
-                open += 1
+                open += direction
         self.command_index += 1
 
     def interpret(self, item):
