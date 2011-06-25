@@ -62,13 +62,13 @@ class BFInterpreter(object):
         self.command_index += 1
 
     def goto_matching_paren(self, direction):
-        open = 1
-        while open:
+        onstack = 1
+        while onstack:
             self.command_index += direction
             if self.commands[self.command_index] == ']':
-                open -= direction
+                onstack -= direction
             elif self.commands[self.command_index] == '[':
-                open += direction
+                onstack += direction
         self.command_index += 1
 
     def interpret(self, item):
