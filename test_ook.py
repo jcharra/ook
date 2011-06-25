@@ -54,6 +54,9 @@ class OokTest(unittest.TestCase):
         self.ook.interpret_items([("ook?", "ook.")])
         assert list(self.ook.cells) == [0, 0], "Left failed"
         assert self.ook.index == 0, "Index move to the left failed"
+        self.ook.interpret_items([("ook?", "ook.")])
+        assert list(self.ook.cells) == [0, 0, 0], "Left failed"
+        assert self.ook.index == 0, "Index move to the left failed"
 
     def test_raw_inc(self):
         self.ook.interpret_raw_text("ook. ook.")
@@ -76,6 +79,10 @@ class OokTest(unittest.TestCase):
                                     "ook. ook. ook! ook? "
                                     "ook! ook! ook? ook! ook? ook! ook! ook.")
         assert self.ook.output_buffer == [0], self.ook.output_buffer
+
+    def test_squares(self):
+        self.ook.interpret_file('squares.ook')
+        assert "10000" in self.ook.as_ascii(), "Output squares: %" % self.ook.as_ascii()
 
 class BFTest(unittest.TestCase):
     def setUp(self):

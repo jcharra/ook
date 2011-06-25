@@ -39,7 +39,11 @@ class BrainfuckParser(object):
             if x in self.primitives or x in (self.BEGIN, self.END):
                 yield x
 
+# TODO: Reimplement with index stack indicating open loops.
+# then proceed as in the brainfuck specification.
 class Interpreter(object):
+    MAX_NESTED_LOOPS = 1000
+
     def __init__(self, ook_mode=True):
         self.bf_parser = BrainfuckParser()
         self.ook_parser = OokParser()
@@ -120,7 +124,11 @@ class Interpreter(object):
                     self.interpret_items(self.loop)
                 return
         elif item == self.parser.BEGIN:
+            if self.open_loops < self.MAX_NESTED_LOOPS:
                 self.open_loops += 1
+            else:
+                raise LoopError("Nesting maximum (%s) exceeded" 
+                                % self.MAX_NESTED_LOOPS)
         self.loop.append(item)
 
     def interpret_directly(self, item):
