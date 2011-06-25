@@ -105,7 +105,7 @@ if __name__ == '__main__':
     import sys
 
     if len(sys.argv) < 2:
-        print "I need a filename"
+        print "\nUsage: python bf.py <INPUT_FILE>\n"
         sys.exit()
 
     fname = sys.argv[1]
