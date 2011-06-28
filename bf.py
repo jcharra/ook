@@ -1,4 +1,6 @@
 
+import re
+import sys
 from collections import deque
 
 class Tape(object):
@@ -81,7 +83,7 @@ class BFInterpreter(object):
         elif item == '<':
             self.tape.left()
         elif item == '.':
-            print chr(self.tape.get())
+            sys.stdout.write(chr(self.tape.get()))
         elif item == ',':
             try:
                 val = int(raw_input())
@@ -90,16 +92,37 @@ class BFInterpreter(object):
                 # Ignore invalid input
                 pass
 
+ook2bf = {('ook.', 'ook.'): '+',
+          ('ook!', 'ook!'): '-',
+          ('ook!', 'ook.'): '.',
+          ('ook.', 'ook!'): ',',
+          ('ook.', 'ook?'): '>',
+          ('ook?', 'ook.'): '<',
+          ('ook!', 'ook?'): '[',
+          ('ook?', 'ook!'): ']'}
+
+OOK_REGEX = "(ook[\.\!\?])\s*(ook[\.\!\?])"
+
+def convertOokToBF(bf_input):
+    output = []
+    for match in re.findall(OOK_REGEX, bf_input.lower()):
+        if match in ook2bf:
+            output.append(ook2bf[match])
+    return "".join(output)
+
+def print_usage():
+    print "\nUsage: python bf.py [-b|-o] <INPUT_FILE>\n"
 
 if __name__ == '__main__':
-    import sys
-
-    if len(sys.argv) < 2:
-        print "\nUsage: python bf.py <INPUT_FILE>\n"
+    if len(sys.argv) < 3 or sys.argv[1] not in ("-o", "-b"):
+        print_usage()
         sys.exit()
 
-    fname = sys.argv[1]
+    fname = sys.argv[2]
     listing = file(fname, 'r').read()
+
+    if sys.argv[1] == "-o":
+        listing = convertOokToBF(listing)
 
     interpreter = BFInterpreter()
     interpreter.run_commands(listing)
