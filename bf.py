@@ -111,7 +111,7 @@ def convertOokToBF(bf_input):
     return "".join(output)
 
 def print_usage():
-    print "\nUsage: python bf.py [-b|-o] <INPUT_FILE>\n"
+    print("\nUsage: python bf.py [-b|-o] <INPUT_FILE>\n")
 
 if __name__ == '__main__':
     if len(sys.argv) < 3 or sys.argv[1] not in ("-o", "-b"):
