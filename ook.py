@@ -81,7 +81,7 @@ class Interpreter(object):
         try:
             self.cells[self.index] = int(raw_input("Your input: "))
         except (TypeError, ValueError):
-            print "Invalid input! Continuing ..."
+            print("Invalid input! Continuing ...")
 
     def as_ascii(self):
         return "".join([chr(c) for c in self.output_buffer])
@@ -141,28 +141,28 @@ class Interpreter(object):
             method = self.parser.primitives[item]
             getattr(self, method)()
         else:
-            print "Unknown token '%s' - ignored" % (item, )
+            print("Unknown token '%s' - ignored" % (item, ))
 
     def interpret_file(self, fname):
         file = open(fname, 'r')
         self.interpret_raw_text(file.read())
         
     def interactive_mode(self):
-        print "Ook! and Brainfuck interpreter V0.9 - written by Johannes Charra in 2011."
-        print "Type '?' to display the status of the interpreter. "
-        print "Type 'b' to enter brainfuck mode. Empty input quits."
+        print("Ook! and Brainfuck interpreter V0.9 - written by Johannes Charra in 2011.")
+        print("Type '?' to display the status of the interpreter. ")
+        print("Type 'b' to enter brainfuck mode. Empty input quits.")
         while True:
             inp = raw_input("oo> ").strip()
             if inp == "?":
-                print self
+                print(self)
             elif inp == "b":
-                print "Entering brainfuck mode. Type 'o' to return to Ook!"
+                print("Entering brainfuck mode. Type 'o' to return to Ook!")
                 self.set_parser(self.bf_parser)
             elif inp == "o":
-                print "Entering Ook! mode. Type 'b' to return to brainfuck."
+                print("Entering Ook! mode. Type 'b' to return to brainfuck.")
                 self.set_parser(self.ook_parser)
             elif inp == "":
-                print self
+                print(self)
                 break
             else:
                 self.interpret_raw_text(inp)
@@ -179,10 +179,10 @@ class Interpreter(object):
                       self.as_ascii())
 
 def print_usage():
-    print "\nUsage:\n"
-    print "Interpret Ook! file: python ook.py -o <FILENAME>"        
-    print "Interpret brainfuck file: python ook.py -b <FILENAME>"
-    print "Interactive mode: python ook.py -i\n"
+    print("\nUsage:\n")
+    print("Interpret Ook! file: python ook.py -o <FILENAME>")        
+    print("Interpret brainfuck file: python ook.py -b <FILENAME>")
+    print("Interactive mode: python ook.py -i\n")
 
 
 if __name__ == '__main__':
@@ -199,7 +199,7 @@ if __name__ == '__main__':
         elif sys.argv[1] == "-o":
             ook = Interpreter(ook_mode=True)
             ook.interpret_file(sys.argv[2])
-            print ook
+            print(ook)
         else:
             print_usage()
     else:
