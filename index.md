@@ -1,3 +1,3 @@
 # Ook
 
-Just a simple project. Now with github pages and workflow.
+Just a simple project. Now with github pages and workflow!
